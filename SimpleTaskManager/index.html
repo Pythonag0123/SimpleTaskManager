@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>🌸 Cute Task Manager</title>
+
+<style>
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+        font-family:'Poppins',sans-serif;
+    }
+
+    body{
+        height:100vh;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        background:linear-gradient(135deg,#ffd6e8,#e0c3fc);
+        overflow:hidden;
+    }
+
+    /* 🌸 floating flowers */
+    .flower{
+        position:absolute;
+        font-size:22px;
+        animation:float 10s linear infinite;
+        opacity:.7;
+    }
+
+    @keyframes float{
+        from{transform:translateY(100vh) rotate(0deg);}
+        to{transform:translateY(-10vh) rotate(360deg);}
+    }
+
+    .container{
+        width:95%;
+        max-width:420px;
+        background:white;
+        padding:25px;
+        border-radius:18px;
+        box-shadow:0 10px 25px rgba(0,0,0,.15);
+        text-align:center;
+        z-index:10;
+    }
+
+    h2{
+        margin-bottom:15px;
+        color:#ff69b4;
+    }
+
+    input,button{
+        width:100%;
+        padding:10px;
+        margin-top:10px;
+        border-radius:8px;
+        border:1px solid #ddd;
+        font-size:14px;
+    }
+
+    button{
+        background:#ff69b4;
+        color:white;
+        cursor:pointer;
+        transition:.2s;
+    }
+
+    button:hover{
+        transform:scale(1.03);
+        background:#ff4fa3;
+    }
+
+    ul{
+        list-style:none;
+        margin-top:20px;
+    }
+
+    li{
+        background:#fff0f7;
+        padding:10px;
+        border-radius:10px;
+        margin-top:8px;
+        display:flex;
+        flex-direction:column;
+        gap:6px;
+        transition:.2s;
+    }
+
+    li.completed{
+        text-decoration:line-through;
+        opacity:.6;
+    }
+
+    .row{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+    }
+
+    .actions button{
+        width:auto;
+        padding:5px 8px;
+        margin-left:5px;
+        font-size:12px;
+    }
+
+    .delete{ background:#ff6b6b; }
+    .edit{ background:#6c63ff; }
+    .done{ background:#20c997; }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>🌸 Task Manager</h2>
+
+    <input type="text" id="task" placeholder="Task name">
+    <input type="datetime-local" id="due-date">
+
+    <button onclick="addTask()">Add Task ✨</button>
+
+    <ul id="task-list"></ul>
+</div>
+
+
+<script>
+const taskList = document.getElementById("task-list");
+
+function addTask(){
+    const taskText = document.getElementById("task").value;
+    const dueDate = document.getElementById("due-date").value;
+
+    if(!taskText || !dueDate) return;
+
+    const li = document.createElement("li");
+
+    li.innerHTML = `
+        <div class="row">
+            <span class="task-text">${taskText}</span>
+            <span>${new Date(dueDate).toLocaleString()}</span>
+        </div>
+
+        <div class="actions">
+            <button class="done">✓</button>
+            <button class="edit">Edit</button>
+            <button class="delete">Delete</button>
+        </div>
+    `;
+
+    taskList.appendChild(li);
+
+    // reminder
+    const timeDiff = new Date(dueDate) - new Date();
+    if(timeDiff > 0){
+        setTimeout(()=>alert(`Reminder: ${taskText} is due! 🌸`), timeDiff);
+    }
+
+    // clear inputs
+    document.getElementById("task").value="";
+    document.getElementById("due-date").value="";
+}
+
+
+/* ===== event delegation ===== */
+taskList.addEventListener("click", function(e){
+
+    const li = e.target.closest("li");
+
+    if(e.target.classList.contains("delete")){
+        li.remove();
+    }
+
+    if(e.target.classList.contains("done")){
+        li.classList.toggle("completed");
+    }
+
+    if(e.target.classList.contains("edit")){
+        const textSpan = li.querySelector(".task-text");
+
+        const newText = prompt("Rename task:", textSpan.innerText);
+        if(newText){
+            textSpan.innerText = newText;
+        }
+    }
+});
+
+
+/* ===== flowers animation ===== */
+function createFlower(){
+    const flower = document.createElement("div");
+    flower.className="flower";
+    flower.innerText="🌸";
+
+    flower.style.left=Math.random()*100+"vw";
+    flower.style.animationDuration=(6+Math.random()*6)+"s";
+
+    document.body.appendChild(flower);
+
+    setTimeout(()=>flower.remove(),12000);
+}
+
+setInterval(createFlower,700);
+</script>
+
+</body>
+</html>
