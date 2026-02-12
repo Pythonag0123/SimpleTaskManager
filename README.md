@@ -7,7 +7,7 @@ The application allows users to manage tasks efficiently with real-time reminder
 
 ## 🔗 Live Demo
 
-(Add GitHub Pages link here after deployment)
+https://pythonag0123.github.io/SimpleTaskManager/
 
 ---
 
